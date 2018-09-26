@@ -1,0 +1,29 @@
+.button{
+    /* color: #cf3703; */
+    background: $fluorescent-orange;
+    border: none;
+    font-size: $font-l-size;
+    font-weight: 400;
+    border-radius: 5px;
+    padding: $s-size;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1;
+    padding: $s-size;
+    color: inherit;
+}
+
+.button--link{
+  background: none;
+  color: white;
+}
+
+.button--form{
+  background: $greenish-blue;
+  color: white;
+}
+
+.button--remove{
+  background: $med-grey;
+  /* color: white; */
+}

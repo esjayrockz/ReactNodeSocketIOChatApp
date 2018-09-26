@@ -1,0 +1,24 @@
+.box-layout{
+  align-items: center;
+  background: url('/images/bg.jpg');
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 100%), url('/images/bg.jpg');
+  background-size: cover; // image will adjust itself as we alter the size/shape of the browser window
+  display: flex;
+  height: 100vh; //width correlates with the viewport height
+  width: 100vw; //width correlates with the viewport width
+  justify-content: center;
+}
+
+.box-layout__box{
+  background: fade-out($faded-orange, .15);
+  border-radius: 12px;
+  padding: $l-size $m-size;
+  text-align: center;
+  width: 25rem;
+  //color: #cf3703;
+}
+
+.box-layout__title{
+  margin: 0 0 $m-size 0;
+  line-height: 1;
+}
