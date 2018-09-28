@@ -28,19 +28,19 @@ const renderApp = () => {
 
 ReactDOM.render(<LoadingPage />, document.getElementById('app'));
 
-firebase.auth().onAuthStateChanged((user) => { //this will also run the first time app is loaded or everytime it is refreshed
-  if(user) {
-
-    store.dispatch(login(user.uid));
-    renderApp();
-    if(history.location.pathname === '/'){
-      // history.push('/dashboard');
-    }
-  }
-  else {
-
-    store.dispatch(logout());
-    renderApp();
-    // history.push('/');
-  }
-});
+// firebase.auth().onAuthStateChanged((user) => { //this will also run the first time app is loaded or everytime it is refreshed
+//   if(user) {
+//
+//     store.dispatch(login(user.uid));
+//     renderApp();
+//     // if(history.location.pathname === '/'){
+//     //   history.push('/dashboard');
+//     // }
+//   }
+//   else {
+//
+//     store.dispatch(logout());
+//     renderApp();
+//     // history.push('/');
+//   }
+// });
