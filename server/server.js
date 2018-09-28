@@ -3,12 +3,13 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 
+const {generateMessage} = require('./utils/message');
 const publicPath = path.join(__dirname, '..', 'public');
 const port = process.env.PORT || 8080;
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
-let users = 0;
+
 app.use(express.static(publicPath));
 
 app.get('*', (req, res) => {
@@ -16,19 +17,20 @@ app.get('*', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  users = users + 1;
-  console.log('New user connected, total no. of connected users:', users);
+  console.log('New user connected');
+
+  socket.broadcast.emit('newUser', generateMessage('Admin', 'New user joined'));
+
+  socket.emit('newUser', generateMessage('Admin', 'Welcome to the chat app'));
+
+  socket.on('createMessage', (message, callback) => {
+    io.emit('newMessage', generateMessage(message.from, message.text));
+    callback('Theres no error');
+  });
 
   socket.on('disconnect', () => {
-    users = users - 1;
-    console.log('Client disconnected, total no. of connected users:', users);
+    console.log('Client disconnected');
   });
-
-  socket.on('createMessage', (newMsg) => {
-    io.emit('newMessage', newMsg)
-  });
-
-  io.emit('newConnection', {users});
 });
 
 server.listen(port, () => {

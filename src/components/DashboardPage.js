@@ -10,25 +10,27 @@ export default class DashboardPage extends React.Component {
 
   componentDidMount(){
     const socket = io();
-    socket.on('connect', () => {
-      this.setState(() => ({connected: true}));
+    socket.on('connect', function(){
       console.log('Connected to server');
-      socket.emit('createMessage', {
-        text: `User ${this.state.users} is connected`
-      });
     });
 
-    socket.on('disconnect', () => {
-      this.setState(() => ({connected: false}));
+    socket.on('newUser', function(message){
+      console.log(`${message.text} - from ${message.from}`);
+    });
+
+    socket.on('newMessage', function(message){
+      console.log(`${message.text} - from ${message.from} at ${message.createdAt}`);
+    });
+
+    socket.on('disconnect', function(){
       console.log('Disconnected to server');
     });
 
-    socket.on('newConnection', (count) => {
-      this.setState(() => ({users: count.users}));
-    });
-
-    socket.on('newMessage', (newMsg) => {
-      console.log(newMsg.text);
+    socket.emit('createMessage', {
+      from: 'Sender',
+      text: 'Hey everyone!'
+    }, function(data){
+      console.log(data);
     });
   };
 
@@ -36,8 +38,6 @@ export default class DashboardPage extends React.Component {
     return (
       <div>
         <h1>Welcome to the Chat App</h1>
-        <p>We are {this.state.connected? 'connected':'disconnected'}</p>
-        <p>Total number of connected users: {this.state.users}</p>
       </div>
       );
     }
