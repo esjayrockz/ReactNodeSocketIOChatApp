@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { startLogout } from '../actions/auth';
 
-export const Header = ({ startLogout }) => (
+export const Header = ({ title, startLogout }) => (
   <header className="header">
     <div className="content-container">
       <div className="header__content">
           <Link className="header__title" to="/dashboard">
-            <h2>Chat App</h2>
+            <h2>{title}</h2>
           </Link>
           <button onClick={startLogout} className="button button--link">Logout</button>
       </div>

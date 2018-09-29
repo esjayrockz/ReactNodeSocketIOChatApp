@@ -1,43 +1,61 @@
 import React from 'react';
 import io from 'socket.io-client';
 
+import Header from './Header';
+import SendMessage from './SendMessage';
+import Messages from './Messages';
+
 export default class DashboardPage extends React.Component {
 
   state = {
     connected: false,
-    users: 0
+    users: 0,
+    messages: []
+  };
+
+  socket = io();
+
+  handleAddMessage = (message) => {
+    if(!message){
+      return 'Enter valid message'; //If empty message is submitted
+    }
+    const messageObject = {
+      from: 'User',
+      text: message
+    };
+    this.socket.emit('createMessage', messageObject, function(){
+
+    });
   };
 
   componentDidMount(){
-    const socket = io();
-    socket.on('connect', function(){
+
+    this.socket.on('connect', () => {
       console.log('Connected to server');
     });
 
-    socket.on('newUser', function(message){
-      console.log(`${message.text} - from ${message.from}`);
-    });
-
-    socket.on('newMessage', function(message){
+    this.socket.on('newMessage', (message) => {
       console.log(`${message.text} - from ${message.from} at ${message.createdAt}`);
+      this.setState((prevState)=>({ messages: prevState.messages.concat(message) }));//Add message to the messages array
     });
 
-    socket.on('disconnect', function(){
+    this.socket.on('disconnect', () => {
       console.log('Disconnected to server');
     });
 
-    socket.emit('createMessage', {
-      from: 'Sender',
-      text: 'Hey everyone!'
-    }, function(data){
-      console.log(data);
-    });
   };
 
   render() {
+    const title = 'Chat App';
     return (
       <div>
-        <h1>Welcome to the Chat App</h1>
+        <Header title={title}/>
+        <SendMessage
+          handleAddMessage={this.handleAddMessage}
+        />
+        <Messages
+          messages={this.state.messages}
+        />
       </div>
       );
     }
