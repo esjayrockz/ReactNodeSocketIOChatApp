@@ -5,10 +5,7 @@ export default class Messages extends React.Component {
 
   render(){
     return (
-      <div>
-        <div>
-          <h3>Your Messages</h3>
-        </div>
+      <div className="chat__messages">
           {
             this.props.messages.map((message, index)=>(
             <Message

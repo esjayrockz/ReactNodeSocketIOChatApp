@@ -1,4 +1,5 @@
 import React from 'react';
+import Geolocation from './Geolocation';
 
 export default class SendMessage extends React.Component{
 
@@ -9,21 +10,22 @@ export default class SendMessage extends React.Component{
   onFormSubmit = (event) => {
     event.preventDefault();
     const text = event.target.elements.message.value.trim();
-    const error = this.props.handleAddMessage(text);
+    const error = this.props.handleAddMessage(text, event);
     this.setState(()=> ({ error }));
-    if(!error){
-      event.target.elements.message.value = ''; //This will clear the input form if no error
-    }
   };
 
   render(){
     return (
-      <div>
+      <div className="chat__footer">
         {this.state.error && <p>{this.state.error}</p>}
-        <form onSubmit={this.onFormSubmit}>
-          <input type="text" name="message"/>
+        <form id="message-form" onSubmit={this.onFormSubmit}>
+          <input type="text" name="message" placeholder="Message" autoFocus autoComplete="off"/>
           <button>Send</button>
         </form>
+        <Geolocation
+          sendLocation={this.props.sendLocation}
+          locationButtonText = {this.props.locationButtonText}
+        />
       </div>
     );
   }

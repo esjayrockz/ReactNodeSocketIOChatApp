@@ -1,0 +1,10 @@
+.chat__messages {
+  flex-grow: 1;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat__messages {
+  list-style-type: none;
+  padding: 10px;
+}
