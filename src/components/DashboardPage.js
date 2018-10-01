@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import Header from './Header';
 import SendMessage from './SendMessage';
 import Messages from './Messages';
+import Geolocation from './Geolocation';
 
 export default class DashboardPage extends React.Component {
 
@@ -27,6 +28,21 @@ export default class DashboardPage extends React.Component {
 
     });
   };
+
+  sendLocation = () => {
+    if(!navigator.geolocation){
+      return alert('Geolocation not supported by your browser!');
+    }
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log(position);
+      this.socket.emit('createLocationMessage', {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      });
+    }, () => {
+      alert('Unable to fetch location');
+    });
+  }
 
   componentDidMount(){
 
@@ -55,6 +71,9 @@ export default class DashboardPage extends React.Component {
         />
         <Messages
           messages={this.state.messages}
+        />
+        <Geolocation
+          sendLocation={this.sendLocation}
         />
       </div>
       );
