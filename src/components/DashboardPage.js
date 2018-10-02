@@ -21,7 +21,6 @@ export default class DashboardPage extends React.Component {
     if(!message){
       return 'Enter valid message'; //If empty message is submitted
     }
-    console.log(event.target.elements + ' ' + message);
     const messageObject = {
       from: 'User',
       text: message
@@ -49,8 +48,8 @@ export default class DashboardPage extends React.Component {
     });
   }
 
-  componentDidMount(){
 
+  componentDidMount(){
     this.socket.on('connect', () => {
       console.log('Connected to server');
     });
