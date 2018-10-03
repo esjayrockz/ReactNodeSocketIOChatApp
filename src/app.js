@@ -34,7 +34,7 @@ firebase.auth().onAuthStateChanged((user) => { //this will also run the first ti
     store.dispatch(login(user.uid));
     renderApp();
     // if(history.location.pathname === '/'){
-    //   history.push('/dashboard');
+    //   history.push('/chatscreen');
     // }
   }
   else {

@@ -1,16 +1,16 @@
 import React from 'react';
 import io from 'socket.io-client';
+import { connect } from 'react-redux';
 
 import Header from './Header';
 import People from './People';
 import SendMessage from './SendMessage';
 import Messages from './Messages';
 
-export default class DashboardPage extends React.Component {
+export class ChatScreenPage extends React.Component {
 
   state = {
-    connected: false,
-    users: 0,
+    users: [],
     messages: [],
     locationButtonText: true
   };
@@ -51,20 +51,44 @@ export default class DashboardPage extends React.Component {
 
   componentDidMount(){
     this.socket.on('connect', () => {
-      console.log('Connected to server');
+      this.socket.emit('join', this.props.rooms, (err) => {
+        if(err){
+          alert(err);
+          this.props.history.push('/');
+        } else{
+          console.log('No error');
+        }
+      });
     });
 
-    this.socket.on('newMessage', (message) => {
-      console.log(`${message.text} - from ${message.from} at ${message.createdAt}`);
-      this.setState((prevState)=>({ messages: prevState.messages.concat(message) }));//Add message to the messages array
-    });
 
     this.socket.on('disconnect', () => {
       console.log('Disconnected to server');
     });
 
+    this.socket.on('updateUserList', (users) => {
+      this.setState(() => ({users}));
+    });
+
+    this.socket.on('newMessage', (message) => {
+      console.log(`${message.text} - from ${message.from} at ${message.createdAt}`);
+    if (this.refs.chatScreenRef) {
+      if(message.from === 'Admin' && message.text === 'Welcome to the chat app.' && this.state.messages.length != 0){
+        message.text = 'Connected back.';
+        console.log('this.state.messages.length', this.state.messages.length);
+        this.setState((prevState)=>({ messages: prevState.messages.concat(message) }));
+      } else{
+        console.log('this.state.messages.length', this.state.messages.length);
+        this.setState((prevState)=>({ messages: prevState.messages.concat(message) }));//Add message to the messages array
+      }
+    }
+    });
+
     this.socket.on('newLocationMessage', (message) => {
-      this.setState((prevState)=>({ messages: prevState.messages.concat(message) }));
+      if (this.refs.chatScreenRef) {
+        this.setState((prevState)=>({ messages: prevState.messages.concat(message) }));
+      }
+
     });
 
   };
@@ -72,8 +96,11 @@ export default class DashboardPage extends React.Component {
   render() {
     const title = 'Chat App';
     return (
-      <div className="chat">
-        <People className="chat__sidebar" />
+      <div className="chat" ref="chatScreenRef">
+        <People
+          users={this.state.users}
+         />
+
         {/* <Header title={title} /> */}
         <div className="chat__main">
           <Messages
@@ -89,3 +116,11 @@ export default class DashboardPage extends React.Component {
       );
     }
   }
+
+const mapStateToProps = (state)=>{
+  return {
+    rooms: state.rooms
+  };
+};
+
+export default connect(mapStateToProps)(ChatScreenPage);;

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Router, Route, Switch, Link, NavLink } from 'react-router-dom';
+import { BrowserRouter, Router, Route, Switch, Link, NavLink } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 import LoginPage from '../components/LoginPage';
-import DashboardPage from '../components/DashboardPage';
+import ChatScreenPage from '../components/ChatScreenPage';
+import JoinChat from '../components/JoinChat';
 import NotFoundPage from '../components/NotFoundPage';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -14,15 +15,16 @@ export const history = createHistory();
 // BrowserRouter had history built in.
 
 const AppRouter = () => (
-  <Router history={history}>
+  // <Router history={history}>
+  <BrowserRouter>
     <div>
       <Switch>
-        <PublicRoute path="/" component={DashboardPage} exact={true} />
-        <PrivateRoute path="/dashboard" component={DashboardPage} />
+        <Route path="/" component={JoinChat} exact={true} />
+        <Route path="/chatscreen" component={ChatScreenPage} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>
-  </Router>
+  </BrowserRouter>
 );
 
 export default AppRouter;
