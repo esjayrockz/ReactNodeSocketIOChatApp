@@ -22,7 +22,6 @@ export class ChatScreenPage extends React.Component {
       return 'Enter valid message'; //If empty message is submitted
     }
     const messageObject = {
-      from: 'User',
       text: message
     };
     const input = event.target.elements.message;
