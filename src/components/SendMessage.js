@@ -17,7 +17,6 @@ export default class SendMessage extends React.Component{
   render(){
     return (
       <div className="chat__footer">
-        {this.state.error && <p>{this.state.error}</p>}
         <form id="message-form" onSubmit={this.onFormSubmit}>
           <input type="text" name="message" placeholder="Message" autoFocus autoComplete="off"/>
           <button>Send</button>
