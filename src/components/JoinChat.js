@@ -8,6 +8,10 @@ export class JoinChat extends React.Component{
     return typeof str === 'string' && str.trim().length>0;
   }
 
+  ignoreCaseAndSpacesForRooms = (room) => {
+    return room.split(' ').map((word) => word.toLowerCase()).join('');
+  }
+
   onSubmit = (event) => {
     event.preventDefault();
     const name = event.target.elements.name.value.trim();
@@ -15,7 +19,7 @@ export class JoinChat extends React.Component{
     if(!this.isRealString(name) || !this.isRealString(room)){
       alert('Name and room name are required.');
     } else {
-      this.props.submitChatRoomDetails(name, room);
+      this.props.submitChatRoomDetails(name, this.ignoreCaseAndSpacesForRooms(room));
       this.props.history.push('/chatscreen');
     }
   }

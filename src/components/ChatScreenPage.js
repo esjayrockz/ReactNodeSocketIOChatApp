@@ -54,9 +54,7 @@ export class ChatScreenPage extends React.Component {
         if(err){
           alert(err);
           this.props.history.push('/');
-        } else{
-          console.log('No error');
-        }
+        } 
       });
     });
 
@@ -66,18 +64,17 @@ export class ChatScreenPage extends React.Component {
     });
 
     this.socket.on('updateUserList', (users) => {
-      this.setState(() => ({users}));
+        if (this.refs.chatScreenRef) {
+        this.setState(() => ({users}));
+      }
     });
 
     this.socket.on('newMessage', (message) => {
-      console.log(`${message.text} - from ${message.from} at ${message.createdAt}`);
     if (this.refs.chatScreenRef) {
       if(message.from === 'Admin' && message.text === 'Welcome to the chat app.' && this.state.messages.length != 0){
         message.text = 'Connected back.';
-        console.log('this.state.messages.length', this.state.messages.length);
         this.setState((prevState)=>({ messages: prevState.messages.concat(message) }));
       } else{
-        console.log('this.state.messages.length', this.state.messages.length);
         this.setState((prevState)=>({ messages: prevState.messages.concat(message) }));//Add message to the messages array
       }
     }
